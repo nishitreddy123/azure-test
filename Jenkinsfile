@@ -20,7 +20,7 @@ node {
   
     stage('deploy') {
       def resourceGroup = 'nishu'
-      def webAppName = 'ballhype'
+      def webAppName = 'ballbat'
       // login Azure
       withCredentials([usernamePassword(credentialsId: 'nishu', passwordVariable: 'EYl8Q~-ABv~oKVBm3ehbISrxGNJ9zbbklkg3EbA4', usernameVariable: '7e9a106c-6ab5-4c27-b45b-28e174f9ad57')]) {
        sh '''
