@@ -72,7 +72,13 @@ spec:
               key: DB_HOST
         ports:
         - containerPort: 80
-      
-          
+      tolerations:
+        - key: special
+          operator: "Exists"
+          effect: "NoSchedule"
+
       imagePullSecrets:
       - name: test
+
+          
+     
