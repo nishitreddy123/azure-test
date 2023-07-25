@@ -39,7 +39,7 @@ spec:
                   - frontend
       containers:
       - name: main-app-container
-        image: hypereal.azurecr.io/nishu:1.0.2
+        image: nishitreddy123/ty:latest
         resources:
           requests:
             cpu: 100m
