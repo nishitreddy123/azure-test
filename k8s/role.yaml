@@ -1,0 +1,9 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dotnet-role
+  namespace: gill
+rules:
+  - apiGroups: [""]         # Apply to core Kubernetes API group (api/v1)
+    resources: ["*"]    
+    verbs: ["get", "list", "watch", "create", "delete"]
