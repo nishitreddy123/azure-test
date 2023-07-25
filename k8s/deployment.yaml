@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnetdemo
+  namespace: gill
+  labels:
+    app: dotnetdemo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dotnetdemo
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: dotnetdemo
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+                - key: type
+                  operator: In
+                  values:
+                  - frontend
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+                - key: type
+                  operator: In
+                  values:
+                  - frontend
+      containers:
+      - name: main-app-container
+        image: hypereal.azurecr.io/nishu:1.0.2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        livenessProbe:
+          tcpSocket:
+            port: 5000
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /_status/healthz
+            port: 5000
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          successThreshold: 1
+          failureThreshold: 3
+          periodSeconds: 10   
+        env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: dotnetdemo
+              key: DB_HOST
+        ports:
+        - containerPort: 80
+      tolerations:  
+        - key: "special"
+          operator: "Exists"
+          effect: "NoSchedule"
+          
+      imagePullSecrets:
+      - name: test
